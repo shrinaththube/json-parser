@@ -7,32 +7,36 @@ import sys
 import json
 from pprint import pprint
 from collections import OrderedDict # This converts json file into object with order
+""" printKeyValue method prints the key value in hierarchical form of any type of JSON file"""
 
 class JsonParser:
     
     def __init__(self,space=0):
-        self.space = space
+        self.space = space # It is used for give spacing before any print
+    ''' This is recursive function. It is general so any JSON  file can be parsed'''
         
     def printKeyValue(self,j_obj):
+        #Edge case if given json object is not valid then terminate program
         if not isinstance(j_obj, dict):
             return None
+        # Iterate over all key value pairs.
         for key, value in j_obj.items():
-            if isinstance(value, dict):
-                print ''.ljust(self.space),key," =>"
+            if isinstance(value, dict): # if value is again dictionary call this method recursively
+                print ''.ljust(self.space),key," =>" #add spaces before string. It is to print hierarchical order.
                 self.space +=3 
-                self.printKeyValue(value)
+                self.printKeyValue(value) # recursive call
                 self.space -=3
             elif isinstance(value, list):
-                for ind,ele in enumerate(value):
-                    if isinstance(ele, dict):
+                for ind,ele in enumerate(value):  # it count the ind form 0 to length of value list
+                    if isinstance(ele, dict): # if element is again dictionary call this method recursively
                         print ''.ljust(self.space),key , [ind], " =>"
                         self.space +=3 
-                        self.printKeyValue(ele)
+                        self.printKeyValue(ele) # recursive call
                         self.space -=3 
                     else:
-                        print ''.ljust(self.space),key, [ind], " =>", ele
+                        print ''.ljust(self.space),key, [ind], " =>", ele # if value is not dictionary then print it.
             else:
-                print ''.ljust(self.space), key, " =>", value
+                print ''.ljust(self.space), key, " =>", value #if value is not dictionary then print it.
              
     
     
